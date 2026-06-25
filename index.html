@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h2 id="greeting"></h2>
+        <h3 id="clock"></h3>
+        <h1>📚 StudyHub</h1>
+        <p>Student Productivity Platform</p>
+    </header>
+
+    <button id="themeBtn">🌙 Dark Mode</button>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h2 id="taskCount">0</h2>
+            <p>Tasks</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 id="noteCount">0</h2>
+            <p>Notes</p>
+        </div>
+
+    </div>
+
+    <h2 id="completion"></h2>
+
+    <div class="container">
+
+        <div class="card">
+            <h2>📝 Task Manager</h2>
+            <p>Manage daily tasks</p>
+            <a href="tasks.html">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>📖 Notes</h2>
+            <p>Create and save notes</p>
+            <a href="notes.html">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>⏰ Pomodoro Timer</h2>
+            <p>Boost productivity</p>
+            <a href="timer.html">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Attendance Tracker</h2>
+            <p>Track attendance percentage</p>
+            <a href="attendance.html">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>🧠 Quiz</h2>
+            <p>Test your knowledge</p>
+            <a href="quiz.html">Open</a>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Goal Tracker</h2>
+            <p>Track daily study goals</p>
+            <a href="goal.html">Open</a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 StudyHub | Developed by Misthi Maurya</p>
+    </footer>
+
+    <script>
+
+        const themeBtn = document.getElementById("themeBtn");
+
+        themeBtn.addEventListener("click", () => {
+
+            document.body.classList.toggle("dark");
+
+            if(document.body.classList.contains("dark")){
+
+                themeBtn.innerText = "☀ Light Mode";
+                localStorage.setItem("theme","dark");
+
+            } else {
+
+                themeBtn.innerText = "🌙 Dark Mode";
+                localStorage.setItem("theme","light");
+            }
+        });
+
+        if(localStorage.getItem("theme") === "dark"){
+
+            document.body.classList.add("dark");
+            themeBtn.innerText = "☀ Light Mode";
+        }
+
+        let tasks =
+        JSON.parse(localStorage.getItem("tasks")) || [];
+
+        let notes =
+        JSON.parse(localStorage.getItem("notes")) || [];
+
+        document.getElementById("taskCount").innerText =
+        tasks.length;
+
+        document.getElementById("noteCount").innerText =
+        notes.length;
+
+        let completedTasks = tasks.filter(task => task.completed).length;
+
+        let totalTasks = tasks.length;
+
+        let percentage = totalTasks === 0
+            ? 0
+            : Math.round((completedTasks / totalTasks) * 100);
+
+        document.getElementById("completion").innerText =
+        "Task Completion: " + percentage + "%";
+
+        let hour = new Date().getHours();
+
+        let greeting = "";
+
+        if(hour < 12){
+            greeting = "☀ Good Morning";
+        }
+        else if(hour < 18){
+            greeting = "🌤 Good Afternoon";
+        }
+        else{
+            greeting = "🌙 Good Evening";
+        }
+
+        document.getElementById("greeting").innerText = greeting;
+
+        setInterval(() => {
+
+            let now = new Date();
+
+            document.getElementById("clock").innerText =
+            now.toLocaleTimeString();
+
+        }, 1000);
+
+    </script>
+
+</body>
+</html>

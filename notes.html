@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes Manager</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    padding:20px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+#searchInput{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+textarea{
+    width:100%;
+    height:120px;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    resize:vertical;
+}
+
+button{
+    margin-top:10px;
+    padding:10px 15px;
+    border:none;
+    border-radius:5px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.note{
+    background:#f1f1f1;
+    padding:15px;
+    margin-top:10px;
+    border-radius:5px;
+}
+
+.note p{
+    margin-bottom:10px;
+    word-wrap:break-word;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📖 Notes Manager</h1>
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search Notes..."
+        onkeyup="searchNotes()">
+
+    <textarea
+        id="noteInput"
+        placeholder="Write your note here..."></textarea>
+
+    <button onclick="addNote()">Save Note</button>
+
+    <div id="notesContainer"></div>
+
+</div>
+
+<script>
+
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+displayNotes();
+
+function addNote(){
+
+    let noteInput =
+    document.getElementById("noteInput");
+
+    let note =
+    noteInput.value.trim();
+
+    if(note === ""){
+        alert("Write something!");
+        return;
+    }
+
+    notes.push(note);
+
+    localStorage.setItem(
+        "notes",
+        JSON.stringify(notes)
+    );
+
+    noteInput.value = "";
+
+    displayNotes();
+}
+
+function displayNotes(){
+
+    let container =
+    document.getElementById("notesContainer");
+
+    container.innerHTML = "";
+
+    notes.forEach((note,index)=>{
+
+        let div =
+        document.createElement("div");
+
+        div.className = "note";
+
+        div.innerHTML = `
+            <p>${note}</p>
+            <button onclick="deleteNote(${index})">
+                Delete
+            </button>
+        `;
+
+        container.appendChild(div);
+
+    });
+}
+
+function deleteNote(index){
+
+    notes.splice(index,1);
+
+    localStorage.setItem(
+        "notes",
+        JSON.stringify(notes)
+    );
+
+    displayNotes();
+}
+
+function searchNotes(){
+
+    let value =
+    document.getElementById("searchInput")
+    .value
+    .toLowerCase();
+
+    let notesDiv =
+    document.querySelectorAll(".note");
+
+    notesDiv.forEach(note=>{
+
+        if(
+            note.innerText
+            .toLowerCase()
+            .includes(value)
+        ){
+            note.style.display = "block";
+        }
+        else{
+            note.style.display = "none";
+        }
+
+    });
+}
+
+</script>
+
+</body>
+</html>

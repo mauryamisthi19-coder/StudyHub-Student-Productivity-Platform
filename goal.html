@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Goal Tracker</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    width:90%;
+    max-width:500px;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.progress-container{
+    width:100%;
+    background:#ddd;
+    height:30px;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:green;
+    text-align:center;
+    color:white;
+    line-height:30px;
+    transition:0.5s;
+}
+
+#status{
+    text-align:center;
+    margin-top:20px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🎯 Study Goal Tracker</h1>
+
+    <input
+    type="number"
+    id="goalHours"
+    placeholder="Daily Goal Hours">
+
+    <input
+    type="number"
+    id="completedHours"
+    placeholder="Completed Hours">
+
+    <button onclick="calculateProgress()">
+        Track Progress
+    </button>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar">
+            0%
+        </div>
+    </div>
+
+    <h2 id="status"></h2>
+
+</div>
+
+<script>
+
+function calculateProgress(){
+
+    let goal =
+    Number(document.getElementById("goalHours").value);
+
+    let completed =
+    Number(document.getElementById("completedHours").value);
+
+    if(goal <= 0){
+
+        alert("Please enter a valid goal.");
+        return;
+    }
+
+    if(completed < 0){
+
+        alert("Completed hours cannot be negative.");
+        return;
+    }
+
+    let percentage =
+    Math.min((completed / goal) * 100, 100);
+
+    document.getElementById("progressBar")
+    .style.width = percentage + "%";
+
+    document.getElementById("progressBar")
+    .innerText = percentage.toFixed(0) + "%";
+
+    let status = "";
+
+    if(percentage >= 100){
+
+        status = "🏆 Goal Achieved!";
+
+    }else if(percentage >= 75){
+
+        status = "🔥 Almost There!";
+
+    }else if(percentage >= 50){
+
+        status = "👍 Good Progress";
+
+    }else{
+
+        status = "📚 Keep Studying";
+    }
+
+    document.getElementById("status")
+    .innerText = status;
+
+    localStorage.setItem("goal", goal);
+    localStorage.setItem("completed", completed);
+}
+
+window.onload = function(){
+
+    let goal =
+    localStorage.getItem("goal");
+
+    let completed =
+    localStorage.getItem("completed");
+
+    if(goal){
+        document.getElementById("goalHours").value = goal;
+    }
+
+    if(completed){
+        document.getElementById("completedHours").value = completed;
+    }
+
+    if(goal && completed){
+        calculateProgress();
+    }
+};
+
+</script>
+
+</body>
+</html>

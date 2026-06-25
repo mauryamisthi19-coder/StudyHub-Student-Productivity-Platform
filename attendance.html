@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Tracker</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    width:90%;
+    max-width:450px;
+    background:white;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+#result{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+    line-height:1.8;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🎯 Attendance Tracker</h1>
+
+    <input
+        type="number"
+        id="attended"
+        placeholder="Classes Attended">
+
+    <input
+        type="number"
+        id="total"
+        placeholder="Total Classes">
+
+    <button onclick="calculateAttendance()">
+        Calculate Attendance
+    </button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+function calculateAttendance(){
+
+    let attended =
+    Number(document.getElementById("attended").value);
+
+    let total =
+    Number(document.getElementById("total").value);
+
+    if(attended <= 0 || total <= 0){
+
+        alert("Please enter valid values.");
+        return;
+    }
+
+    if(attended > total){
+
+        alert("Attended classes cannot exceed total classes.");
+        return;
+    }
+
+    let percentage =
+    ((attended / total) * 100).toFixed(2);
+
+    let status = "";
+
+    if(percentage >= 75){
+
+        status = "✅ Good Attendance";
+
+    }else if(percentage >= 50){
+
+        status = "⚠️ Average Attendance";
+
+    }else{
+
+        status = "❌ Low Attendance";
+    }
+
+    document.getElementById("result").innerHTML =
+    `Attendance: ${percentage}% <br>${status}`;
+}
+
+</script>
+
+</body>
+</html>
